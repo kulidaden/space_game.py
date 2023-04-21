@@ -2,10 +2,22 @@ import pygame, sys
 from bullet import Bullet
 from ino import Ino
 import time
+import sqlite3
+import csv
+from stats import Stats
 
+
+conn = sqlite3.connect('D:/Python/Proj/DataBase/Diplom.db')
 def events(screen, gun, bullets):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            with open('highscore.txt', 'r', ) as hs, open('player.txt', 'r') as p:
+                highscore = hs.readline().strip()
+                print(highscore)
+                login=p.readline().strip()
+                conn.execute(f"UPDATE users SET marks = {highscore} WHERE login = '{login}'")
+                conn.commit()
+
             sys.exit()
         elif event.type==pygame.KEYDOWN:
             if event.key==pygame.K_d:
@@ -59,6 +71,12 @@ def gun_kill(stats,screen,sc,gun,inos,bullets):
         time.sleep(1)
     else:
         stats.run_game=False
+        with open('highscore.txt', 'r', ) as hs, open('player.txt', 'r') as p:
+            highscore = hs.readline().strip()
+            print(highscore)
+            login = p.readline().strip()
+            conn.execute(f"UPDATE users SET marks = {highscore} WHERE login = '{login}'")
+            conn.commit()
         sys.exit()
 
 

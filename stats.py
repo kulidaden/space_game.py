@@ -6,5 +6,5 @@ class Stats():
             self.high_score=int(f.readline())
 
     def resrt_stats(self):
-        self.guns_left=3
+        self.guns_left=1
         self.score=0

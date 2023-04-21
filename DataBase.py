@@ -1,13 +1,14 @@
 from tkinter import *
 import tkinter as tk
 import os
-
+from tkinter import ttk
 import pygame.mixer
 from PIL import ImageTk, Image
 import sqlite3
 from tkinter import messagebox
 from space_game import run
 import pyglet
+
 conn = sqlite3.connect('D:/Python/Proj/DataBase/Diplom.db')
 sql=conn.cursor()
 
@@ -51,58 +52,77 @@ def enter():
         result1=login.fetchall()
         # print(result1)
         if result1 != list():
-            root2.destroy()
-            root3 = Tk()
-            path = 'D:\Python\Proj\img\menu.jpg'
-            image = Image.open(path)
-            width = 800
-            height = 500
-            image = image.resize((width, height), Image.LANCZOS)
-            image = ImageTk.PhotoImage(image)
-            canvas = tk.Canvas(root3, width=width, height=height)
-            canvas.pack(side="top", fill="both")
-            canvas.create_image(0, 0, anchor="nw", image=image)
-            btnq = Button(root3, text='Вихід', command=quit, width=10, bg='#00bfff')
-            canvas.create_window((2, 472), anchor="nw", window=btnq)
-            def bTnp1():
-                root3.destroy()
-                run()
-            btnp1 = Button(root3, text='ГРАТИ', command=bTnp1, width=25, height=2, bg='#00bfff')
-            canvas.create_window((320, 100), anchor="nw", window=btnp1)
-            def bTnp2():
-                root4=Toplevel(root3)
+            highscore1 = conn.execute(f"SELECT marks FROM users where login='{entry1.get()}'")
+            highscore2=highscore1.fetchall()
+            print(highscore2)
+            with open('highscore.txt', 'w') as f:
+                print(highscore2[0][0], file=f)
+            with open('player.txt','w') as p:
+                print(result1[0][0],file=p)
+            password=conn.execute(f"SELECT password FROM users where password='{entry2.get()}'")
+            result2=password.fetchall()
+            if result2!=list():
+                root2.destroy()
+                root3 = Tk()
                 path = 'D:\Python\Proj\img\menu.jpg'
                 image = Image.open(path)
-                width = 1000
+                width = 800
                 height = 500
                 image = image.resize((width, height), Image.LANCZOS)
                 image = ImageTk.PhotoImage(image)
-                canvas = tk.Canvas(root4, width=width, height=height)
+                canvas = tk.Canvas(root3, width=width, height=height)
                 canvas.pack(side="top", fill="both")
                 canvas.create_image(0, 0, anchor="nw", image=image)
-                btnq = Button(root4, text='Вихід', command=quit, width=10, bg='#00bfff')
-                canvas.create_window((2, 472), anchor="nw", window=btnq)
-                def naz():
-                    root4.withdraw()
-                    root3.deiconify()
 
-                btnp1 = Button(root4, text='НАЗАД', command=naz, width=10, bg='#00bfff')
-                canvas.create_window((100, 472), anchor="nw", window=btnp1)
-                root4.geometry('1000x500+300+100')
-                root4.resizable(False, False)
-                root4.overrideredirect(True)
-                root4.mainloop()
-                root4.mainloop()
-            btnp2 = Button(root3, text='ТАБЛИЦЯ ЛІДЕРІВ', command=bTnp2, width=25, height=2, bg='#00bfff')
-            canvas.create_window((320, 170), anchor="nw", window=btnp2)
-            btnp3 = Button(root3, text='НАЛАШТУВАННЯ', width=25, height=2, bg='#00bfff')
-            canvas.create_window((320, 240), anchor="nw", window=btnp3)
-            root3.geometry('800x500+400+200')
-            root3.resizable(False, False)
-            root3.overrideredirect(True)
-            root3.mainloop()
+                def bTnp1():
+                    root3.destroy()
+                    run()
+                btnp1 = Button(root3, text='ГРАТИ', command=bTnp1, width=25, height=2, bg='#00bfff')
+                canvas.create_window((320, 100), anchor="nw", window=btnp1)
+                def bTnp2():
+                    root4=Toplevel(root3)
+                    root4.geometry('1000x700')
+                    path = 'D:\Python\Proj\img\menu.jpg'
+                    image = Image.open(path)
+                    width = 1000
+                    height = 700
+                    image = image.resize((width, height), Image.LANCZOS)
+                    image = ImageTk.PhotoImage(image)
+                    canvas = tk.Canvas(root4, width=width, height=height)
+                    canvas.pack(side="top", fill="both")
+                    canvas.create_image(0, 0, anchor="nw", image=image)
+                    btnq = Button(canvas, text='Вихід', command=quit, width=10, bg='#00bfff')
+                    canvas.create_window((1,1), anchor="nw", window=btnq)
+                    def naz():
+                        root4.withdraw()
+                        root3.deiconify()
+                    btnp1 = Button(canvas, text='НАЗАД', command=naz, width=10, bg='#00bfff')
+                    canvas.create_window((5, 50), anchor="nw", window=btnp1)
+
+                    conn = sqlite3.connect('D:/Python/Proj/DataBase/Diplom.db')
+                    cursor = conn.execute("SELECT  nickname,marks FROM users ORDER BY marks DESC LIMIT 5;")
+
+                    tk.Label(canvas, text="nickname", font='Verdana 15',bg='black', fg='white').grid(padx=100, row=0,column=0)
+                    tk.Label(canvas, text="marks", font='Verdana 15',bg='black', fg='white').grid(padx=200, row=0,column=1)
+                    i = 1
+                    for row in cursor:
+                        tk.Label(canvas, text=row[0], font='Verdana 15', bg='black', fg='white').grid(row=i,column=0)
+                        tk.Label(canvas, text=row[1], font='Verdana 15', bg='black', fg='white').grid(row=i,column=1)
+                        i += 1
+                    conn.close()
+                    root4.mainloop()
+                btnp2 = Button(root3, text='ТАБЛИЦЯ ЛІДЕРІВ', command=bTnp2, width=25, height=2, bg='#00bfff')
+                canvas.create_window((320, 170), anchor="nw", window=btnp2)
+                btnp3 = Button(root3, text='Вихід', command=exit, width=25, height=2, bg='#00bfff')
+                canvas.create_window((320, 240), anchor="nw", window=btnp3)
+                root3.geometry('800x500+400+200')
+                root3.resizable(False, False)
+                root3.overrideredirect(True)
+                root3.mainloop()
+            else:
+                messagebox.showinfo("Помилка","Введені данні не коректні")
         else:
-            messagebox.showinfo("Помилка","Введені данні не коректні")
+            messagebox.showinfo("Помилка", "Введені данні не коректні")
 
     # pygame.mixer.init()
     # pygame.mixer.music.load('D:\Python\Proj\music\kos_1.mp3')
@@ -125,8 +145,8 @@ btn2=Button(root1,text='Вхід',command=enter,bd=1,bg='#00bfff').place(x=450,y
 
 
 def regist():
-    root1.destroy()
-    root2 = Tk()
+    root1.withdraw()
+    root2 = Toplevel(root1)
     path = 'D:\Python\Proj\img\88.jpg'
     image = Image.open(path)
     width = 600
@@ -153,6 +173,7 @@ def regist():
 
 
 
+
     def reg():
         login1 = conn.execute(f"SELECT login FROM users where login='{entry3.get()}'")
         result1 = login1.fetchall()
@@ -163,10 +184,10 @@ def regist():
         else:
             messagebox.showinfo("Форма", "Корстувач успішно зареєстрований!")
             conn.cursor()
-            conn.execute(
-                f"INSERT INTO users(login,password,nickname) VALUES('{entry3.get()}','{entry4.get()}','{entry5.get()}');")
+            conn.execute(f"INSERT INTO users(login,password,nickname, marks) VALUES('{entry3.get()}','{entry4.get()}','{entry5.get()}', 0);")
             conn.commit()
-            root2.destroy()
+            root2.withdraw()
+            root1.deiconify()
 
 
 
@@ -190,3 +211,4 @@ root1.geometry('600x300+500+200')
 root1.resizable(False,False)
 root1.overrideredirect(True)
 root1.mainloop()
+
