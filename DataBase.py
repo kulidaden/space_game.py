@@ -81,34 +81,45 @@ def enter():
                 canvas.create_window((320, 100), anchor="nw", window=btnp1)
                 def bTnp2():
                     root4=Toplevel(root3)
-                    root4.geometry('1000x700')
+                    root4.geometry('900x600+350+100')
+                    root4.resizable(True,True)
+                    root4.overrideredirect(True)
                     path = 'D:\Python\Proj\img\menu.jpg'
                     image = Image.open(path)
                     width = 1000
-                    height = 700
+                    height = 600
                     image = image.resize((width, height), Image.LANCZOS)
                     image = ImageTk.PhotoImage(image)
                     canvas = tk.Canvas(root4, width=width, height=height)
-                    canvas.pack(side="top", fill="both")
+                    canvas.pack(side="left", fill="both")
                     canvas.create_image(0, 0, anchor="nw", image=image)
-                    btnq = Button(canvas, text='Вихід', command=quit, width=10, bg='#00bfff')
-                    canvas.create_window((1,1), anchor="nw", window=btnq)
+                    btnq = Button(canvas, text='Вихід',font='Verdana 10', command=quit, width=10, bg='#00bfff')
+                    canvas.create_window((1,571), anchor="nw", window=btnq)
+
                     def naz():
                         root4.withdraw()
                         root3.deiconify()
-                    btnp1 = Button(canvas, text='НАЗАД', command=naz, width=10, bg='#00bfff')
-                    canvas.create_window((5, 50), anchor="nw", window=btnp1)
+                    btnp1 = Button(canvas, text='Назад', command=naz,font='Verdana 10', width=10, bg='#00bfff')
+                    canvas.create_window((817, 571), anchor="nw", window=btnp1)
 
                     conn = sqlite3.connect('D:/Python/Proj/DataBase/Diplom.db')
-                    cursor = conn.execute("SELECT  nickname,marks FROM users ORDER BY marks DESC LIMIT 5;")
-
-                    tk.Label(canvas, text="nickname", font='Verdana 15',bg='black', fg='white').grid(padx=100, row=0,column=0)
-                    tk.Label(canvas, text="marks", font='Verdana 15',bg='black', fg='white').grid(padx=200, row=0,column=1)
-                    i = 1
+                    cursor = conn.execute("SELECT  nickname,marks FROM users ORDER BY marks DESC LIMIT 10;")
+                    canvas.create_text(200,20, text="Ваше ім'я", font='Verdana 20 bold',fill='#EFFF00')
+                    canvas.create_text(400, 20, text="Бали", font='Verdana 20 bold',fill='#EFFF00')
+                    i = 50
                     for row in cursor:
-                        tk.Label(canvas, text=row[0], font='Verdana 15', bg='black', fg='white').grid(row=i,column=0)
-                        tk.Label(canvas, text=row[1], font='Verdana 15', bg='black', fg='white').grid(row=i,column=1)
-                        i += 1
+                        canvas.create_text(200,20+i, text=row[0], font='Verdana 20 bold',fill='#00bfff')
+                        canvas.create_text(400,20+i, text=row[1], font='Verdana 20 bold',fill='#00bfff')
+                        i += 50
+
+                    with open('player.txt', 'r') as p:
+                        login = p.readline().strip()
+                        cursor2=conn.execute(f"SELECT COUNT(*)+1 as rank FROM users WHERE marks > (SELECT marks FROM users WHERE login = '{login}');")
+                    canvas.create_text(750,20, text="Місце в рейтингу", font='Verdana 20 bold',fill='#EFFF00')
+                    for row in cursor2:
+                        print(row[0])
+                        canvas.create_rectangle(720,50,785,90,fill='#00bfff',outline='#00bfff')
+                        canvas.create_text(750,70, text=row[0], font='Verdana 25 bold',fill='#EFFF00')
                     conn.close()
                     root4.mainloop()
                 btnp2 = Button(root3, text='ТАБЛИЦЯ ЛІДЕРІВ', command=bTnp2, width=25, height=2, bg='#00bfff')
@@ -135,9 +146,9 @@ def enter():
     lab3 = canvas.create_text(175, 110, text='Емейл:', font='Verdana 13', fill="#00bfff")
     lab4 = canvas.create_text(170, 140, text='Пароль:', font='Verdana 13', fill="#00bfff")
     entry1=Entry(root2,width=30)
-    canvas.create_window((208,100),anchor='nw',window=entry1)
+    canvas.create_window((208,100),anchor='nw',height=25,window=entry1)
     entry2=Entry(root2,width=30,show='*')
-    canvas.create_window((208,130),anchor='nw',window=entry2)
+    canvas.create_window((208,130),anchor='nw',height=25,window=entry2)
     root2.resizable(False, False)
     root2.overrideredirect(True)
     root2.mainloop()
