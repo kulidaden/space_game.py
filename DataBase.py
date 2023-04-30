@@ -117,7 +117,7 @@ def enter():
                         cursor2=conn.execute(f"SELECT COUNT(*)+1 as rank FROM users WHERE marks > (SELECT marks FROM users WHERE login = '{login}');")
                     canvas.create_text(750,20, text="Місце в рейтингу", font='Verdana 20 bold',fill='#EFFF00')
                     for row in cursor2:
-                        print(row[0])
+                        # print(row[0])
                         canvas.create_rectangle(720,50,785,90,fill='#00bfff',outline='#00bfff')
                         canvas.create_text(750,70, text=row[0], font='Verdana 25 bold',fill='#EFFF00')
                     conn.close()
