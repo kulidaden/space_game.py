@@ -227,9 +227,9 @@ def enter():
                 root3.overrideredirect(True)
                 root3.mainloop()
             else:
-                messagebox.showinfo("Помилка","Введені данні не коректні")
+                messagebox.showinfo("Помилка","Введені данні не коректні!")
         else:
-            messagebox.showinfo("Помилка", "Введені данні не коректні")
+            messagebox.showinfo("Помилка", "Введені данні не коректні!")
 
     # pygame.mixer.init()
     # pygame.mixer.music.load('D:\Python\w\music\kos_1.mp3')
