@@ -13,7 +13,6 @@ def events(screen, gun, bullets):
         if event.type == pygame.QUIT:
             with open('highscore.txt', 'r', ) as hs, open('player.txt', 'r') as p:
                 highscore = hs.readline().strip()
-                # print(highscore)
                 login=p.readline().strip()
                 conn.execute(f"UPDATE users SET marks = {highscore} WHERE login = '{login}'")
                 conn.commit()
@@ -73,7 +72,6 @@ def gun_kill(stats,screen,sc,gun,inos,bullets):
         stats.run_game=False
         with open('highscore.txt', 'r', ) as hs, open('player.txt', 'r') as p:
             highscore = hs.readline().strip()
-            # print(highscore)
             login = p.readline().strip()
             conn.execute(f"UPDATE users SET marks = {highscore} WHERE login = '{login}'")
             conn.commit()

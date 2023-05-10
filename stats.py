@@ -7,4 +7,4 @@ class Stats():
 
     def resrt_stats(self):
         self.guns_left=3
-        self.score=5
+        self.score=0
