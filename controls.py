@@ -7,7 +7,7 @@ import csv
 from stats import Stats
 
 
-conn = sqlite3.connect('D:/Python/Proj/DataBase/Diplom.db')
+conn = sqlite3.connect('DataBase/Diplom.db')
 def events(screen, gun, bullets):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

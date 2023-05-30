@@ -7,16 +7,15 @@ from PIL import ImageTk, Image
 import sqlite3
 from tkinter import messagebox
 from space_game import run
-import pyglet
 import re
 import smtplib
 
-conn = sqlite3.connect('D:/Python/w/DataBase/Diplom.db')
+conn = sqlite3.connect('DataBase\Diplom.db')
 sql=conn.cursor()
 
 
 root1=Tk()
-path = 'D:\Python\w\img\88.jpg'
+path = 'img\88.jpg'
 image = Image.open(path)
 width = 600
 height = 300
@@ -41,7 +40,7 @@ lab6 = canvas.create_text(300, 250, text='Для авторизації запо
 def menu():
     root1.destroy()
     root3 = Tk()
-    path = 'D:\Python\w\img\menu.jpg'
+    path = 'img\menu.jpg'
     image = Image.open(path)
     width = 800
     height = 500
@@ -71,7 +70,7 @@ def menu():
         root4.geometry('900x650+350+80')
         root4.resizable(True, True)
         root4.overrideredirect(True)
-        path = 'D:\Python\w\img\menu.jpg'
+        path = 'img\menu.jpg'
         image = Image.open(path)
         width = 1000
         height = 650
@@ -90,7 +89,7 @@ def menu():
         btnp1 = Button(canvas, text='Назад', command=naz, font='Verdana 10', width=10, bg='#00bfff')
         canvas.create_window((816, 621), anchor="nw", window=btnp1)
 
-        conn = sqlite3.connect('D:/Python/w/DataBase/Diplom.db')
+        conn = sqlite3.connect('DataBase/Diplom.db')
         cursor = conn.execute("SELECT  nickname,marks FROM users ORDER BY marks DESC LIMIT 10;")
         canvas.create_text(200, 70, text="Нікнейм", font='Verdana 20 bold', fill='#EFFF00')
         canvas.create_text(420, 70, text="Бали", font='Verdana 20 bold', fill='#EFFF00')
@@ -124,7 +123,7 @@ def menu():
         root5.geometry('900x600+350+100')
         root5.resizable(True, True)
         root5.overrideredirect(True)
-        path = '''D:\Python\w\img\w.jpg'''
+        path = '''img\w.jpg'''
         image = Image.open(path)
         width = 1000
         height = 600
@@ -166,7 +165,7 @@ def menu():
         root6.geometry('900x600+350+100')
         root6.resizable(True, True)
         root6.overrideredirect(True)
-        path = 'D:\Python\w\img\qq.jpg'
+        path = 'img\qq.jpg'
         image = Image.open(path)
         width = 1000
         height = 600
@@ -246,9 +245,9 @@ def reg():
 # ФУНКЦІЇ ВІКНА
 def q():
     root1.quit()
+
+
 btn1=Button(root1,text='Вихід',command=q,bg='#00bfff').place(x=2,y=272)
-
-
 
 btn2=Button(root1,text='Вхід',command=ent,bd=1,bg='#00bfff',width=5).place(x=200,y=200)
 
