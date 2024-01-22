@@ -237,26 +237,29 @@ def reg():
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             messagebox.showerror("Помилка","Такого емайлу не існує")
     else:
-        login1 = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
-        result1 = login1.fetchall()
-        login2 = conn.execute(f"SELECT nickname FROM users where nickname='{entry3.get()}'")
-        result2 = login2.fetchall()
-        if result1 != list() or result2 != list():
-            messagebox.showerror("Помилка", "Такий емайл або нікнейм вже зареєстрований!")
+        if entry3.get()!="":
+            login1 = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
+            result1 = login1.fetchall()
+            login2 = conn.execute(f"SELECT nickname FROM users where nickname='{entry3.get()}'")
+            result2 = login2.fetchall()
+            if result1 != list() or result2 != list():
+                messagebox.showerror("Помилка", "Такий емайл або нікнейм вже зареєстрований!")
+            else:
+                messagebox.showinfo("Форма", "Користувач успішно зареєстрований!")
+                conn.cursor()
+                conn.execute(f"INSERT INTO users(login,password,nickname, marks) VALUES('{entry1.get()}','{entry2.get()}','{entry3.get()}', 0);")
+                login = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
+                result_login = login.fetchall()
+                marks=conn.execute(f"SELECT marks FROM users where login='{entry1.get()}'")
+                result_marks=marks.fetchall()
+                with open('highscore.txt', 'w') as f:
+                    print(result_marks[0][0], file=f)
+                with open('player.txt', 'w') as p:
+                    print(result_login[0][0], file=p)
+                conn.commit()
+                menu()
         else:
-            messagebox.showinfo("Форма", "Користувач успішно зареєстрований!")
-            conn.cursor()
-            conn.execute(f"INSERT INTO users(login,password,nickname, marks) VALUES('{entry1.get()}','{entry2.get()}','{entry3.get()}', 0);")
-            login = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
-            result_login = login.fetchall()
-            marks=conn.execute(f"SELECT marks FROM users where login='{entry1.get()}'")
-            result_marks=marks.fetchall()
-            with open('highscore.txt', 'w') as f:
-                print(result_marks[0][0], file=f)
-            with open('player.txt', 'w') as p:
-                print(result_login[0][0], file=p)
-            conn.commit()
-            menu()
+            messagebox.showerror("Помилка","Заповніть усі поля!")
 
 # ФУНКЦІЇ ВІКНА
 def q():
