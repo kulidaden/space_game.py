@@ -109,6 +109,7 @@ def menu():
             canvas.create_rectangle(665, 110, 737, 150, fill='#00bfff', outline='#00bfff')
             canvas.create_text(700, 130, text=row[0], font='Verdana 25 bold', fill='#EFFF00')
         conn.close()
+        root4.overrideredirect(True)
         root4.mainloop()
 
     def bTnp3():
@@ -151,6 +152,7 @@ def menu():
         btnp1 = Button(canvas, text='Назад', command=naz, font='Verdana 10', width=10, bg='#00bfff')
         canvas.create_window((817, 571), anchor="nw", window=btnp1)
         canvas.create_text(450, 250, text=txt, font='Verdana 16', width=800, fill='#00bfff')
+        root5.overrideredirect(True)
         root5.mainloop()
 
     def bTnp4():
@@ -177,8 +179,12 @@ def menu():
         btnq = Button(canvas, text='Вихід', font='Verdana 10', command=q4, width=10, bg='#00bfff')
         canvas.create_window((1, 571), anchor="nw", window=btnq)
         txt = 'ЦЯ ГРА БУЛА РОЗРОБЛЕНА У 2023 РОЦІ. АВТОР ГРИ КУЛІДА ДЕНИС. ВОНА Є АНАЛОГОМ ' \
-              'РІЗНОМАНІТНИХ КОСМІЧНИХ ІГОР.'
-        canvas.create_text(450, 250, text=txt, font='Verdana 16', width=400, fill='#EFFF00')
+              'РІЗНОМАНІТНИХ КОСМІЧНИХ ІГОР.\n' \
+              'ГРАВЦІ МОЖУТЬ ПОРИНУТИ У АРКАДНУ ГРУ SPACE DEFENDERS. ЗНИЩУЙТЕ ВОРОГІВ ТА ЗМАГАЙТЕСЬ ' \
+              'ОДИН З ОДНИМ ТА СПОСТЕРІГАТИ ЗА РЕЙТИНГОМ У ТІБЛИЦІ. У ГРІ ВАМ НАЛЕЖИТЬ КЕРУВАТИ КОСМІЧНИМ КОРАБЛЕМ' \
+              'ТА БОРОТИСЯ ІЗ ЗЛОВІСНИМИ ІНОПЛАНЕТЯНАМИ ТА ЗБЕРЕГТИ ПРОНЕТУ ВІД ЗНИЩЕННЯ.'
+        canvas.create_text(450, 250, text=txt, font='Verdana 16', width=700, fill='#EFFF00')
+        root6.overrideredirect(True)
 
         def naz():
             root6.withdraw()
@@ -208,15 +214,17 @@ def ent():
     result1 = login.fetchall()
 
     if result1 != list():
-        highscore1 = conn.execute(f"SELECT marks FROM users where login='{entry1.get()}'")
-        highscore2 = highscore1.fetchall()
+        login = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
+        result_login = login.fetchall()
+        marks = conn.execute(f"SELECT marks FROM users where login='{entry1.get()}'")
+        result_marks = marks.fetchall()
         with open('highscore.txt', 'w') as f:
-            print(highscore2[0][0], file=f)
+            print(result_marks[0][0], file=f)
         with open('player.txt', 'w') as p:
-            print(result1[0][0], file=p)
+            print(result_login[0][0], file=p)
         password = conn.execute(f"SELECT password FROM users where password='{entry2.get()}'")
-        result2 = password.fetchall()
-        if result2 != list():
+        result_password = password.fetchall()
+        if result_password != list():
             menu()
         else:
             messagebox.showinfo("Помилка", "Введені данні не коректні!")
@@ -227,18 +235,26 @@ def reg():
     email=entry1.get()
             # Перевірка формату електронної пошти за допомогою регулярного виразу
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            messagebox.showerror("Помилка","Такої електронної пошти не існує")
+            messagebox.showerror("Помилка","Такого емайлу не існує")
     else:
         login1 = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
         result1 = login1.fetchall()
         login2 = conn.execute(f"SELECT nickname FROM users where nickname='{entry3.get()}'")
         result2 = login2.fetchall()
         if result1 != list() or result2 != list():
-            messagebox.showerror("Помилка", "Такий логін або нікнейм вже зареєстрований!")
+            messagebox.showerror("Помилка", "Такий емайл або нікнейм вже зареєстрований!")
         else:
             messagebox.showinfo("Форма", "Користувач успішно зареєстрований!")
             conn.cursor()
             conn.execute(f"INSERT INTO users(login,password,nickname, marks) VALUES('{entry1.get()}','{entry2.get()}','{entry3.get()}', 0);")
+            login = conn.execute(f"SELECT login FROM users where login='{entry1.get()}'")
+            result_login = login.fetchall()
+            marks=conn.execute(f"SELECT marks FROM users where login='{entry1.get()}'")
+            result_marks=marks.fetchall()
+            with open('highscore.txt', 'w') as f:
+                print(result_marks[0][0], file=f)
+            with open('player.txt', 'w') as p:
+                print(result_login[0][0], file=p)
             conn.commit()
             menu()
 
