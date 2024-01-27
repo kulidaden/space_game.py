@@ -3,7 +3,6 @@
 
 #Інсталяція.
 1. Клонуйте репозиторій: " git clone https://github.com/kulidaden/space_game.py.git
-2. Зайдіть в папку "dist" потім в "DataBase" і запустіть DataBase.exe.
    
 ## Використання
 Зайдіть в папку "dist" потім в "DataBase" і запустіть DataBase.exe.
